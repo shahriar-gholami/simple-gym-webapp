@@ -1,0 +1,232 @@
+{% load static %}
+{% load humanize %}
+<!doctype html>
+<html dir="rtl" lang="fa-IR" style="--primary-rgb:195,60,152;">
+<head>
+    {% block meta %}
+
+    {% endblock %}
+    <link href="{{ store.get_logo_image }}" rel="shortcut icon" type="image/x-icon"/>
+    <title>{% block title %}Sticky Sidebars{% endblock %}</title>
+    <link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}" id="style" rel="stylesheet"/>
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/plugins.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/transparent-style.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/skin-modes.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/css/icons.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/plugins/persian-date-picker/babakhani/persian-datepicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/switcher/css/switcher.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/switcher/demo.css' %}" rel="stylesheet"/>
+    <link href="{% static 'assets/fonts/styles-fa-num/iran-yekan.css' %}" id="fonts" rel="stylesheet">
+    <link href="{% static 'assets/css/rtl.css' %}" rel="stylesheet"/>
+</head>
+
+<body class='app rtl light-mode horizontal scrollable-layout color-menu'>
+
+<!-- PAGE -->
+<div class="page">
+    <div class="page-main">
+        <div class="main-content app-content">
+            <div class="side-app ">
+                <!-- app-Header -->
+                <div class="header sticky hor-header" style="margin-bottom: -74px;">
+                    <div class='container-fluid main-container'>
+                        <div class="d-flex">
+                            <a class="light-logo-3 " href="{% url 'shop:index' %}">
+                                <img alt="logo" class="header-brand-img desktop-logo" src="{% static 'assets\images\logo.jpg' %}" height="80px">
+                                <img alt="logo" class="header-brand-img light-logo1" src="{% static 'assets\images\logo.jpg' %}" height="65px"></a>
+                            <!-- sidebar-toggle-->
+                        
+                            <!-- LOGO -->
+                            
+                            <div class="d-flex order-lg-2 ms-auto header-right-icons">
+                                <div class="dropdown d-none">
+                                    <a class="nav-link icon" data-bs-toggle="dropdown" href="javascript:void(0)">
+                                        <i class="fe fe-search"></i>
+                                    </a>
+                                    
+                                </div>
+                                
+
+
+                                <div class="dropdown  d-flex notifications">
+                                    <a class="nav-link icon" href="http://127.0.0.1:8000/admin/login/?next=/admin/"><i
+                                            class="fe fe-home"></i>
+                                    </a>             
+                                </div> 
+
+                                <!-- SEARCH -->
+                                <button aria-controls="navbarSupportedContent-4" aria-expanded="false"
+                                        aria-label="Toggle navigation" class="navbar-toggler navresponsive-toggler d-lg-none ms-auto"
+                                        data-bs-target="#navbarSupportedContent-4" data-bs-toggle="collapse"
+                                        type="button">
+                                    <span class="navbar-toggler-icon fe fe-search"></span>
+                                </button>
+                                <button class="nav-link icon navbar-toggler navresponsive-toggler d-lg-none ms-auto" data-bs-toggle="sidebar-right"
+                                data-target=".sidebar-right" href="javascript:void(0);" aria-controls="navbarSupportedContent-4" aria-expanded="false"
+                                        aria-label="Toggle navigation"
+                                        data-bs-target="#navbarSupportedContent-4" data-bs-toggle="collapse"
+                                        type="button">
+                                    <span class="navbar-toggler-icon fe fe-align-left"></span>
+                                </button>                        
+                                
+                                <div class="navbar navbar-collapse responsive-navbar p-0">
+                                    <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                                        <div class="d-flex order-lg-2">
+                                                                              
+                                                     
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="demo-icon nav-link icon">
+                                    <i class="fe fe-settings fa-spin  text_primary"></i>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /app-Header -->
+
+                <!--APP-SIDEBAR-->
+                <div class="sticky">
+                    <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+                    <div class="app-sidebar">
+                        
+                        <div class="main-sidemenu">
+                            
+                            <ul class="side-menu">
+                                
+                                <li>
+                                    <a class="side-menu__item has-link" href="{% url 'shop:index' %}"><i
+                                            class="side-menu__icon fe fe-user"></i><span
+                                            class="side-menu__label">مشترکین</span></a>
+                                </li>
+                                <li>
+                                    <a class="side-menu__item has-link" href="{% url 'shop:course_register' %}"><i
+                                            class="side-menu__icon fe fe-shopping-bag"></i><span
+                                            class="side-menu__label">ثبت‌نام دوره</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--/APP-SIDEBAR-->
+                </div>
+        
+                {% block content %}{% endblock %}
+
+                
+        
+                <div class="main-container container-fluid ">
+                    <div class="row mt-15">
+                        <div class="col-md-12 ">
+                            <div class="card mt-20 bg-primary-transparent card-transparent">   
+                                <div class="card-body mt-2">
+                                    
+                                    <footer class="main-footer px-0 pb-0 bg-primary-transparent card-transparent">
+                                        <div class="row">
+                                            <div class="col-md-12 social text-center">
+                                                <ul class="text-center d-inline-block">
+                                                    <li>
+                                                        <a class="social-icon" href="https://www.facebook.com/"
+                                                        target="_blank"><i class="fa fa-facebook"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="social-icon" href="https://twitter.com/"
+                                                        target="_blank"><i class="fa fa-twitter"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="social-icon" href="javascript:void(0)"><i
+                                                                class="fa fa-rss"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="social-icon" href="https://www.youtube.com/"
+                                                        target="_blank"><i class="fa fa-youtube"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="social-icon" href="https://www.linkedin.com/"
+                                                        target="_blank"><i class="fa fa-linkedin"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="social-icon" href="https://myaccount.google.com/"
+                                                        target="_blank"><i class="fa fa-google-plus"></i></a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-12 col-sm-12 mt-3 mt-lg-0 text-center mb-4">
+                                                حق نشر © 1401 <a href="javascript:void(0)"></a>. طراحی شده با <span
+                                                    class="fa fa-heart text-danger"></span> توسط <a
+                                                    href="javascript:void(0)"> پیکوسایت </a>
+                                                کلیه حقوق محفوظ است.
+                                            </div>
+                                        </div>
+                                    </footer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- Sidebar-right -->
+        <div class="sidebar sidebar-right sidebar-animate bg-primary">
+            <div class="panel panel-primary card mb-0 shadow-none border-0">
+                <div class="tab-menu-heading border-0 bg-success d-flex p-3">
+                    <div class="card-title mb-0"><i class="fe fe-bell me-2"></i><span
+                            class=" pulse"></span>خوش آمدید
+                    </div>
+                    <div class="card-options ms-auto">
+                        <a class="sidebar-icon text-end float-end me-3 mb-1" data-bs-toggle="sidebar-right"
+                        data-target=".sidebar-right" href="javascript:void(0);"><i
+                                class="fe fe-x text-white"></i></a>
+                    </div>
+                </div>
+                <div class="panel-body tabs-menu-body latest-tasks p-0 border-0 bg-primary">
+                    
+                    <div class="main-sidemenu">
+                        
+                        <ul class="side-menu">
+                            
+                            <!-- خانه -->
+                            <li>
+                                <a class="side-menu__item has-link" href="{% url 'shop:index' %}"><i
+                                        class="side-menu__icon fe fe-home"></i><span
+                                        class="side-menu__label text-white">مشترکین</span></a>
+                            </li>
+                            <!-- فروشگاه -->
+                            <li>
+                                <a class="side-menu__item has-link" href="{% url 'shop:course_register' %}"><i
+                                        class="side-menu__icon fe fe-shopping-bag"></i><span
+                                        class="side-menu__label text-white">ثبت‌نام دوره‌ها</span></a>
+                            </li>
+                            <!-- دسته‌بندی‌ها -->
+                            +
+                            
+                            
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/Sidebar-right-->
+    </div>
+</div>
+
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/js/sticky.js' %}"></script>
+<script src="{% static 'assets/plugins/sidemenu/sidemenu.js' %}"></script>
+<script src="{% static 'assets/plugins/sidebar/sidebar.js' %}"></script>
+<script src="{% static 'assets/js/custom-swicher.js' %}"></script>
+<script src="{% static 'assets/js/themeColors.js' %}"></script>
+<script src="{% static 'assets/js/widget.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+{% block js %}{% endblock %}
+
+</body>
+</html>

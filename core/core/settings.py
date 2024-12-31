@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'shop',
-    'ckeditor',]
+]
 
 SITE_ID = config("SITE_ID", cast=int, default=1)
 
@@ -80,7 +80,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'shop.context_processors.categories_hierarchy',
             ],
         },
     },
@@ -99,18 +98,6 @@ DATABASES = {
     }
 
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'my_pico_db',
-#         'USER': 'postgres',
-#         'PASSWORD': '88256989Aa!',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -170,13 +157,5 @@ AWS_STORAGE_BUCKET_NAME = 'marketplace-bucket'
 AWS_SERVICE_NAME = 's3'
 AWS_S3_FILE_OVERWRITE = False
 AWS_LOCAL_STORAGE = f'{BASE_DIR}/aws/'
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'Full',
-        'height': 300,
-        'width': 600,
-    },
-}
 
 USE_L10N = False

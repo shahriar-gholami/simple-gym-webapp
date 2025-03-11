@@ -60,7 +60,7 @@ class CourseRegisterView(View):
 			customer = Customer.objects.get(id = customer_id)
 			title_id = form.cleaned_data['title']
 			course_title = CourseTitle.objects.get(id = title_id)
-			register_date = form.cleaned_data['register_date']
+			# register_date = form.cleaned_data['register_date']
 			reserved_sessions = form.cleaned_data['reserved_sessions']
 			cost_paid = form.cleaned_data['cost_paid']
 			new_reserve = ReservedCourse.objects.create(
@@ -68,7 +68,7 @@ class CourseRegisterView(View):
 				title = course_title,
 				num_of_sessions = reserved_sessions,
 				cost_paid = cost_paid,
-				register_date = register_date
+				# register_date = register_date
 			)
 			success_message = 'ثبت نام مشترک با موفقیت انجام شد.' 
 			return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses, 'success_message':success_message})

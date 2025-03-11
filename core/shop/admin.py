@@ -11,13 +11,13 @@ class ReservedCourseInline(admin.TabularInline):
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'phone_number', 'register_date']
-    search_fields = ['full_name', 'phone_number']
-    inlines = [ReservedCourseInline]
+    list_display = ('full_name', 'phone_number', 'create_date', 'ensurance')
+    search_fields = ('full_name', 'phone_number', 'national_code')
+    list_filter = ('ensurance', 'create_date')
 
 @admin.register(ReservedCourse)
 class ReservedCourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'customer', 'num_of_sessions', 'cost_paid', 'register_date']
+    list_display = ['title', 'customer', 'num_of_sessions', 'cost_paid', 'shamsi_register_date']
     search_fields = ['customer__full_name', 'title__name']
 
 class CourseTitleAdmin(admin.ModelAdmin):

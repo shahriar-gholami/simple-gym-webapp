@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load humanize %}
 {% block meta %}
 <meta charset="UTF-8">
 <meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
@@ -123,6 +123,7 @@
                                                         <th>تاریخ ثبت‌نام</th>
                                                         <th>کد ملی</th>
                                                         <th>بیمه</th>
+                                                        <th>مجموع پرداختی</th>
                                                         <th>عملیات</th>
 
 
@@ -131,14 +132,19 @@
                                                     <tbody>
                                                         {% for customer in customers %}
                                                             <tr>
-                                                                <td>{{customer.full_name}}</td>
-                                                                <td>{{customer.phone_number}}</td>
-                                                                <td>{{customer.birthday}}</td>
-                                                                <td>{{customer.register_date}}</td>
-                                                                <td>{{customer.national_code}}</td>
-                                                                <td>{% if customer.ensurance == True %}دارد{% else %}ندارد{% endif %}</td>
                                                                 <td class="align-middle">
-                                                                    <button class="btn btn-success" type="submit">مشاهده دوره‌ها</button>
+                                                                    <a class="modal-effect text-success"
+                                       data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer{{customer.id}}">{{customer.full_name}}</a>
+                                                                </td>
+                                                                <td class="align-middle">{{customer.phone_number}}</td>
+                                                                <td class="align-middle">{{customer.birthday}}</td>
+                                                                <td class="align-middle">{{customer.register_date}}</td>
+                                                                <td class="align-middle">{{customer.national_code}}</td>
+                                                                <td class="align-middle">{% if customer.ensurance == True %}دارد{% else %}ندارد{% endif %}</td>
+                                                                <td class="align-middle">{{customer.get_total_payments|intcomma}} تومان</td>
+                                                                <td class="align-middle" class="align-middle">
+                                                                    <button class="btn btn-success modal-effect text-white"
+                                                                    data-bs-effect="effect-scale" data-bs-toggle="modal" href="#customer{{customer.id}}">مشاهده دوره‌ها</button>
                                                                     <a href="{% url 'shop:delete_customer' customer.id %}" class="btn text-danger bg-danger-transparent btn-icon py-1"
                                                                                             data-bs-original-title="حذف" data-bs-toggle="tooltip"><span
                                                                                                     class="bi bi-trash fs-16"></span></a>
@@ -162,6 +168,48 @@
 
     </div>
 </div>
+
+{% for customer in customers %}
+<div class="modal fade" id="customer{{customer.id}}">
+    <div class="modal-dialog modal-dialog-centered text-center" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">پیش‌نمایش پیام</h6>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"><span
+                        aria-hidden="true ">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table border text-nowrap text-md-nowrap table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>نام دوره</th>
+                                <th>تاریخ ثبت‌نام</th>
+                                <th>تعداد جلسات</th>
+                                <th>هزینه پرداختی</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for course in customer.get_courses.all %}
+                        <tr>
+                            <td>{{course.title}}</td>
+                            <td>{{course.shamsi_register_date}}</td>
+                            <td>{{course.num_of_sessions}}</td>
+                            <td>{{course.cost_paid|intcomma}} تومان</td>
+                        </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-bs-dismiss="modal">بستن</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 {% endblock %}
 

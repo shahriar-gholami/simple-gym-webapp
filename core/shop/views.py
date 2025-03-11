@@ -14,17 +14,33 @@ class CustomerRegister(View):
 	def post(self, request):
 		form = CustomerRegisterForm(request.POST)
 		if form.is_valid():
-			full_name = form.cleaned_data['full_name']
+			name = form.cleaned_data['name']
+			family_name = form.cleaned_data['family_name']
+			full_name = name + " " + family_name
 			phone_number = form.cleaned_data['phone_number']
-			new_customer = Customer.objects.create(
-				full_name = full_name,
-				phone_number = phone_number
-			)
-			return redirect(f'shop:index')
-		return render(request, self.template_name, {'form': form})
+			birthday = form.cleaned_data['birthday']
+			birth_day = birthday[:-10]
+			national_code = form.cleaned_data['national_code']
+			ensurance = form.cleaned_data['ensurance']
+			if ensurance == '0':
+				ensure_status = False
+			else:
+				ensure_status = True
+			if Customer.objects.filter(national_code = national_code).first() == None:
+				new_customer = Customer.objects.create(
+					full_name = full_name,
+					phone_number = phone_number,
+					birthday = birth_day,
+					national_code = national_code, 
+					ensurance = ensure_status
+				)
+				return redirect(f'shop:index')
+			else:
+				customers = Customer.objects.all()
+				return render(request, self.template_name, {'form': form, 'message':'کاربر با این کد ملی قبلا در سامانه ثبت نام شده است.', 'customers':customers})
+		customers = Customer.objects.all()
+		return render(request, self.template_name, {'form': form, 'message':'اطلاعات به صورت ناقص وارد شده است.', 'customers':customers})
 	
-
-
 class CourseRegisterView(View):
 
 	template_name = f'shop/course_register.html'
@@ -59,36 +75,9 @@ class CourseRegisterView(View):
 		fail_message = 'ثبت نام مشترک با موفقیت انجام نشد. اطلاعات ورودی ناقص یا نامعتبر.' 
 		return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses, 'fail_message':fail_message})
 
-# class CouponListView(View):
+class DeleteCustomerView(View):
 
-# 	template_name = f'shop/owner-dashboard-coupons.html'
-
-# 	def get(self, request):
-# 		coupons = Coupon.objects.all()
-# 		return render(request, self.template_name, {'coupons': coupons})
-	
-# 	def post(self, request):
-# 		form = CouponForm(request.POST)
-# 		if form.is_valid():
-# 			print('WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW')
-# 			print(form.cleaned_data)
-# 			code = form.cleaned_data['code']
-# 			from_time = form.cleaned_data['from_time']
-# 			to_time = form.cleaned_data['to_time']
-# 			discount = form.cleaned_data['discount']
-# 			new_coupon = Coupon.objects.create(
-# 											code=code,
-# 											valid_from=from_time,
-# 											valid_to=to_time,
-# 											discount=discount)
-
-
-# 			return redirect(f'shop:owner_dashboard_coupons')
-# 		return render(request, self.template_name, {'form': form})
-
-# class DeleteCouponView(View):
-
-# 	def get(self, request, coupon_id, *args, **kwargs):
-# 		coupon = Coupon.objects.get(id=coupon_id)
-# 		coupon.delete()
-# 		return redirect(f'shop:owner_dashboard_coupons')
+	def get(self, request, customer_id):
+		customer = Customer.objects.get(id = customer_id)
+		customer.delete()
+		return redirect('shop:index')

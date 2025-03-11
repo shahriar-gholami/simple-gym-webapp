@@ -3,9 +3,12 @@ from django import forms
 
 class CustomerRegisterForm(forms.Form):
 
-	full_name = forms.CharField()
+	name = forms.CharField()
+	family_name = forms.CharField()
 	phone_number = forms.CharField()
-
+	birthday = forms.CharField()
+	national_code = forms.CharField()
+	ensurance = forms.CharField()
 
 class CourseRegisterForm(forms.Form):
 	title = forms.CharField()

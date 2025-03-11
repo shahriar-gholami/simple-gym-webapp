@@ -10,8 +10,11 @@ class CourseTitle(models.Model):
 		return f'{self.title}'
 
 class Customer(models.Model):
-	full_name = models.CharField(max_length=30, unique=True)
+	full_name = models.CharField(max_length=30)
 	create_date = models.DateTimeField(auto_now_add = True)
+	birthday = models.CharField(max_length=250, null=True, blank=True)
+	ensurance = models.BooleanField(default=False)
+	national_code = models.CharField(max_length=250, unique=True, null=True, blank=True)
 	phone_number = models.CharField(max_length=250)
 
 	@property

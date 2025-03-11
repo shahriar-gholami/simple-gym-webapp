@@ -12,5 +12,5 @@ urlpatterns = [
     
     path('', views.CustomerRegister.as_view(), name='index'),
     path('course-register', views.CourseRegisterView.as_view(), name='course_register'),
-    
+    path('delete-customer/<int:customer_id>/', views.DeleteCustomerView.as_view(), name='delete_customer'),
    ]

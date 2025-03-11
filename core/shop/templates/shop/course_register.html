@@ -61,7 +61,7 @@
                                                     data-placeholder="انتخاب یکی">
                                                     <option label="انتخاب"></option>
                                                     {% for customer in customers %}
-                                                    <option value="{{customer.id}}">{{ customer.full_name }}</option>
+                                                    <option value="{{customer.id}}">{{ customer.full_name }} - {{customer.national_code}}</option>
                                                     {% endfor %}
                                                     </select>
                                                 </div>

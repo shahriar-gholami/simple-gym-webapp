@@ -13,6 +13,8 @@ class CustomerRegisterForm(forms.Form):
 class CourseRegisterForm(forms.Form):
 	title = forms.CharField()
 	customer = forms.CharField()
-	# register_date = forms.CharField()
 	reserved_sessions = forms.IntegerField()
 	cost_paid = forms.IntegerField()
+
+class SelectInstructor(forms.Form):
+	instructor = forms.CharField()

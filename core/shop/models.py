@@ -56,16 +56,31 @@ class ReservedCourse(models.Model):
 	num_of_sessions = models.IntegerField(default=0)
 	cost_paid = models.IntegerField(default=0)
 	register_date = models.DateTimeField(auto_now_add=True)
-	Instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, null=True, blank=True)
+	instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, null=True, blank=True)
 
 	@property
 	def shamsi_register_date(self):
-		return JalaliDatetime(self.register_date).strftime('%Y/%m/%d')
+		return JalaliDatetime(self.register_date).strftime('%Y/%m/%d')	
+
+	@property
+	def shamsi_register_year(self):
+		return JalaliDatetime(self.register_date).strftime('%Y')
+
+	@property
+	def shamsi_register_month(self):
+		return JalaliDatetime(self.register_date).strftime('%m')		
 
 	def __str__(self):
 		return f'{self.title} - {self.customer.full_name}'
 
+class SalaryPayment(models.Model):
+	amount = models.IntegerField(default=0)
+	instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+	pay_month = models.IntegerField(default=1)
+	pay_year = models.IntegerField(default=1403)
 
+	def __str__(self):
+		return self.instructor.full_name
 
 
 

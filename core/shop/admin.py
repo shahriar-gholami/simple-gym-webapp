@@ -4,10 +4,10 @@ from.models import *
 
 class ReservedCourseInline(admin.TabularInline):
     model = ReservedCourse
-    extra = 0  # تعداد ردیف‌های اضافی که نمایش داده می‌شود
+    extra = 0  
     fields = ['title', 'num_of_sessions', 'cost_paid', 'register_date']
-    readonly_fields = ['register_date']  # اگر نمی‌خواهید برخی فیلدها قابل ویرایش باشند
-    show_change_link = True  # برای ایجاد لینک به جزئیات ReservedCourse
+    readonly_fields = ['register_date'] 
+    show_change_link = True  
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
@@ -25,5 +25,12 @@ class CourseTitleAdmin(admin.ModelAdmin):
     search_fields = ['title',]
 
 admin.site.register(CourseTitle, CourseTitleAdmin)
+
+@admin.register(Instructor)
+class InstructorAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'phone_number', 'national_code', 'created_date')
+    list_filter = ('created_date',)
+    search_fields = ('full_name', 'national_code')
+    filter_horizontal = ('courses',)  # برای نمایش بهتر ManyToManyField
 
 

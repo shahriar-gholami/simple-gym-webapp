@@ -33,4 +33,8 @@ class InstructorAdmin(admin.ModelAdmin):
     search_fields = ('full_name', 'national_code')
     filter_horizontal = ('courses',)  # برای نمایش بهتر ManyToManyField
 
-
+@admin.register(InstructorMonthlyIncome)
+class InstructorMonthlyIncomeAdmin(admin.ModelAdmin):
+    list_display = ('instructor', 'month', 'year', 'get_monthly_income')
+    search_fields = ('instructor', )
+    filter_horizontal = ('courses',)  # برای نمایش بهتر ManyToManyField

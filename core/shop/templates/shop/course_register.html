@@ -77,6 +77,17 @@
                                                     {% endfor %}
                                                     </select>
                                                 </div>
+                                            </div><div class="form-group col-md-6 mb-0">
+                                                <div class="form-group">
+                                                    <label class="form-label">مربی</label>
+                                                    <select name="instructor" class="form-control select2-show-search form-select"
+                                                    data-placeholder="انتخاب یکی">
+                                                    <option label="انتخاب"></option>
+                                                    {% for instructor in instructors %}
+                                                    <option value="{{instructor.id}}">{{ instructor.full_name }}</option>
+                                                    {% endfor %}
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="form-group col-md-6 mb-0">
                                                 <div class="form-group">

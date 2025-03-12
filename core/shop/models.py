@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from khayyam import JalaliDatetime
 from django.utils.timezone import now
+from django.db.models import Sum
+
 
 
 
@@ -45,17 +47,56 @@ class Instructor(models.Model):
 	national_code = models.CharField(max_length=250)
 	courses = models.ManyToManyField(CourseTitle, blank=True)
 	created_date = models.DateTimeField(auto_now_add=True, null=True)
+	share_percent = models.IntegerField(default=70)
 
 	@property
 	def register_date(self):
-		return JalaliDatetime(self.create_date).strftime('%Y/%m/%d')
+		return JalaliDatetime(self.created_date).strftime('%Y/%m/%d')
+
+	def get_monthly_income(self, year, month):
+		"""
+		مجموع هزینه دوره‌های مربی برای یک ماه شمسی خاص
+		:param year: سال شمسی (مثلاً 1402)
+		:param month: ماه شمسی (مثلاً 1 برای فروردین)
+		:return: مجموع هزینه‌ها
+		"""
+		# فیلتر دوره‌های مربوط به مربی و ماه شمسی مورد نظر
+		monthly_courses = ReservedCourse.objects.filter(
+			instructor=self,
+			register_date__year=year,
+			register_date__month=month
+		)
+		# محاسبه مجموع هزینه‌ها
+		total_income = monthly_courses.aggregate(total_income=Sum('cost_paid'))['total_income']
+		return total_income or 0  # اگر هیچ دوره‌ای نبود، 0 برگردان
+
+class InstructorMonthlyIncome(models.Model):
+	instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+	month = models.IntegerField(default=1)
+	year = models.IntegerField(default=1403)
+	courses =models.ManyToManyField('ReservedCourse', blank=True)
+
+	def get_monthly_income(self):
+		income = 0
+		for course in self.courses.all():
+			income = income + course.cost_paid
+		return income
+	
+	def get_self_share(self):
+		share = self.instructor.share_percent
+		return self.get_monthly_income()*share/100
+	
+	def get_gym_share(self):
+		return self.get_monthly_income() - self.get_self_share()
+
+
 
 class ReservedCourse(models.Model):
 	title = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
 	customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 	num_of_sessions = models.IntegerField(default=0)
 	cost_paid = models.IntegerField(default=0)
-	register_date = models.DateTimeField(auto_now_add=True)
+	register_date = models.DateTimeField(default=now)
 	instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, null=True, blank=True)
 
 	@property
@@ -64,11 +105,11 @@ class ReservedCourse(models.Model):
 
 	@property
 	def shamsi_register_year(self):
-		return JalaliDatetime(self.register_date).strftime('%Y')
+		return int(JalaliDatetime(self.register_date).strftime('%Y'))
 
 	@property
 	def shamsi_register_month(self):
-		return JalaliDatetime(self.register_date).strftime('%m')		
+		return int(JalaliDatetime(self.register_date).strftime('%m'))		
 
 	def __str__(self):
 		return f'{self.title} - {self.customer.full_name}'

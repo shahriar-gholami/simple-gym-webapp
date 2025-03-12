@@ -49,7 +49,8 @@ class CourseRegisterView(View):
 		customers = Customer.objects.all()
 		courses = CourseTitle.objects.all()
 		form = CourseRegisterForm()
-		return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses})
+		instructors = Instructor.objects.all()
+		return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses, 'instructors':instructors})
 
 	def post(self, request):
 		customers = Customer.objects.all()
@@ -62,12 +63,26 @@ class CourseRegisterView(View):
 			course_title = CourseTitle.objects.get(id = title_id)
 			reserved_sessions = form.cleaned_data['reserved_sessions']
 			cost_paid = form.cleaned_data['cost_paid']
+			instructor_id = form.cleaned_data['instructor']
+			instructor = Instructor.objects.get(id=instructor_id)
 			new_reserve = ReservedCourse.objects.create(
 				customer = customer,
 				title = course_title,
 				num_of_sessions = reserved_sessions,
 				cost_paid = cost_paid,
+				instructor = instructor,
 			)
+			instructor_monthly_income = InstructorMonthlyIncome.objects.filter(month=new_reserve.shamsi_register_month,year=new_reserve.shamsi_register_year).first()
+			if instructor_monthly_income != None:
+				instructor_monthly_income.courses.add(new_reserve)
+			else:
+				new_instructor_monthly_income = InstructorMonthlyIncome.objects.create(
+					instructor = instructor,
+					month = new_reserve.shamsi_register_month,
+					year = new_reserve.shamsi_register_year,
+				)
+				new_instructor_monthly_income.courses.add(new_reserve)
+				new_instructor_monthly_income.save()
 			success_message = 'ثبت نام مشترک با موفقیت انجام شد.' 
 			return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses, 'success_message':success_message})
 		fail_message = 'ثبت نام مشترک با موفقیت انجام نشد. اطلاعات ورودی ناقص یا نامعتبر.' 
@@ -89,37 +104,17 @@ class InstructorFinanceView(View):
 		instructors = Instructor.objects.all()
 		if instructor_id != 0:
 			instructor = Instructor.objects.get(id = instructor_id)
-			instructor_courses = {}
-			instructor_payments = {}
-			courses = ReservedCourse.objects.filter(instructor=instructor)
-			years = list(set([int(course.shamsi_register_year) for course in courses]))
-			if courses != None:
-				for year in years:
-					instructor_courses[year] = {}
-					instructor_courses[year][1] = []
-					instructor_courses[year][2] = []
-					instructor_courses[year][3] = []
-					instructor_courses[year][4] = []
-					instructor_courses[year][5] = []
-					instructor_courses[year][6] = []
-					instructor_courses[year][7] = []
-					instructor_courses[year][8] = []
-					instructor_courses[year][9] = []
-					instructor_courses[year][10] = []
-					instructor_courses[year][11] = []
-					instructor_courses[year][12] = []
-				for course in courses:
-					instructor_courses[int(course.shamsi_register_year)][int(course.shamsi_register_month)].append(course)
-				return render(request, self.template_name, {'form':form, 
-															'instructor_courses':instructor_courses, 
-															'instructors':instructors,
-															'years':years})
-			return render(request, self.template_name, {'form':form, 'instructors':instructors})
+			instructor_monthly_income = InstructorMonthlyIncome.objects.filter(instructor=instructor)
+			years = list(set([income.year for income in instructor_monthly_income]))
+			monthes = list(set([income.month for income in instructor_monthly_income]))
+			return render(request, self.template_name, {'form':form, 
+											   			'instructor_monthly_income':instructor_monthly_income,
+														'instructors':instructors,
+														'monthes':monthes,
+														'years':years})
 		else:
-			return render(request, self.template_name, {'form':form, 'instructors':instructors})
-						
-
-
+			return render(request, self.template_name, {'form':form, 
+														'instructors':instructors})
 
 	def post(self, request, instructor_id):
 		form = SelectInstructor(request.POST)

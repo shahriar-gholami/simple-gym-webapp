@@ -193,7 +193,7 @@
                         {% for course in customer.get_courses.all %}
                         <tr>
                             <td>{{course.title}}</td>
-                            <td>{{course.shamsi_register_date}}</td>
+                            <td>{{course.register_date}}</td>
                             <td>{{course.num_of_sessions}}</td>
                             <td>{{course.cost_paid|intcomma}} تومان</td>
                         </tr>

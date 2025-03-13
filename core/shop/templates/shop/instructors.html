@@ -93,6 +93,7 @@
                                     <th>تاریخ ثبت‌تام</th>
                                     <th>درصد همکاری</th>
                                     <th>دوره‌های قابل ارائه</th>
+                                    <th>حذف مربی</th>
 
                                 </tr>
                             </thead>
@@ -107,6 +108,11 @@
                                         <td>{{ instructor.register_date }}</td>
                                         <td>{{ instructor.share_percent }}</td>
                                         <td>{% for course in instructor.courses.all %}{{ course.title }} {% endfor %}</td>
+                                        <td>
+                                            <a href="{% url 'shop:delete_instructor' instructor.id %}" class="btn text-danger bg-danger-transparent btn-icon py-1"
+                                                                                            data-bs-original-title="حذف" data-bs-toggle="tooltip"><span
+                                                                                                    class="bi bi-trash fs-16"></span></a>
+                                        </td>
                                     </tr>
                                        
                                 {% endfor %}

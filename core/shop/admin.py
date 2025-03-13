@@ -17,7 +17,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(ReservedCourse)
 class ReservedCourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'customer', 'num_of_sessions', 'cost_paid', 'shamsi_register_date']
+    list_display = ['title', 'customer', 'num_of_sessions', 'cost_paid', 'register_date']
     search_fields = ['customer__full_name', 'title__name']
 
 class CourseTitleAdmin(admin.ModelAdmin):

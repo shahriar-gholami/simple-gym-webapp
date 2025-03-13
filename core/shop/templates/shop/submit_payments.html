@@ -51,7 +51,7 @@
                                             name="instructore_income">
                                             <option selected value="0">انتخاب پرداختی</option>
                                             {% for dept in instructor_monthly_incomes %}
-                                            <option value="{{ dept.id }}">{{dept.instructor.full_name}} - دوره {{dept.year}}/{{dept.month}} - مبلغ {{dept.get_monthly_income|intcomma}} تومان</option>
+                                            <option value="{{ dept.id }}">{{dept.instructor.full_name}} - دوره {{dept.year}}/{{dept.month}} - مبلغ {{dept.get_self_share|intcomma}} تومان</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -140,7 +140,7 @@
                                         {% if payment.shamsi_created_month == month %}
                                             <tr>
                                                 <td>{{ payment.description }}</td>
-                                                <td>{{ payment.amount }}</td>
+                                                <td>{{ payment.amount|intcomma }} تومان</td>
                                                 <td>{{ payment.shamsi_created_date }}</td>
                                             </tr>
                                         {% endif %}

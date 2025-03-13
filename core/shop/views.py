@@ -66,6 +66,10 @@ class CourseRegisterView(View):
 			reserved_sessions = form.cleaned_data['reserved_sessions']
 			cost_paid = form.cleaned_data['cost_paid']
 			instructor_id = form.cleaned_data['instructor']
+			date = form.cleaned_data['date'].replace('سه شنبه', 'سه‌شنبه').replace('چهار شنبه', 'چهارشنبه')
+			print('GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+			print(date.split())
+			
 			instructor = Instructor.objects.get(id=instructor_id)
 			new_reserve = ReservedCourse.objects.create(
 				customer = customer,
@@ -73,6 +77,7 @@ class CourseRegisterView(View):
 				num_of_sessions = reserved_sessions,
 				cost_paid = cost_paid,
 				instructor = instructor,
+				register_date = date
 			)
 			instructor_monthly_income = InstructorMonthlyIncome.objects.filter(month=new_reserve.shamsi_register_month,year=new_reserve.shamsi_register_year,instructor=instructor).first()
 			if instructor_monthly_income != None:
@@ -224,6 +229,13 @@ class InstructorsView(View):
 			courses = CourseTitle.objects.all()
 			return render(request, 'your_template.html', {'form': form, 'courses': courses})
 
+class DeleteInstructorView(View):
+
+	def get(self, request, instructor_id):
+		instructor = Instructor.objects.get(id = instructor_id)
+		instructor.delete()
+		return redirect('shop:instructors')
+	
 class CoursesView(View):
 
 	template_name = 'shop/courses.html'
@@ -243,6 +255,13 @@ class CoursesView(View):
 				title = title
 			)
 			return redirect('shop:courses')
+		
+class DeleteCourseView(View):
+
+	def get(self, request, course_id):
+		course = CourseTitle.objects.get(id = course_id)
+		course.delete()
+		return redirect('shop:courses')
 
 
 

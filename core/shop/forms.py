@@ -16,6 +16,7 @@ class CourseRegisterForm(forms.Form):
 	reserved_sessions = forms.IntegerField()
 	cost_paid = forms.IntegerField()
 	instructor = forms.CharField()
+	date = forms.CharField()
 
 class SelectInstructor(forms.Form):
 	instructor = forms.CharField()

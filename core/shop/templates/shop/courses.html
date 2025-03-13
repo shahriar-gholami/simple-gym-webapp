@@ -65,7 +65,7 @@
                                 <tr class="border-top">
                                     <th>شناسه دوره</th>
                                     <th>عنوان دوره</th>
-
+                                    <th>حذف دوره</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,6 +75,11 @@
                                     <tr>
                                         <td>{{ course.id }}</td>
                                         <td>{{ course.title }}</td>
+                                        <td>
+                                            <a href="{% url 'shop:delete_course' course.id %}" class="btn text-danger bg-danger-transparent btn-icon py-1"
+                                                                                            data-bs-original-title="حذف" data-bs-toggle="tooltip"><span
+                                                                                                    class="bi bi-trash fs-16"></span></a>
+                                        </td>
                                     </tr>
                                        
                                 {% endfor %}

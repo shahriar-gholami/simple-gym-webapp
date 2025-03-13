@@ -69,6 +69,9 @@ class Instructor(models.Model):
 		# محاسبه مجموع هزینه‌ها
 		total_income = monthly_courses.aggregate(total_income=Sum('cost_paid'))['total_income']
 		return total_income or 0  # اگر هیچ دوره‌ای نبود، 0 برگردان
+	
+	def __str__(self):
+		return self.full_name
 
 class InstructorMonthlyIncome(models.Model):
 	instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE)
@@ -102,26 +105,65 @@ class InstructorMonthlyIncome(models.Model):
 	@property
 	def shamsi_pay_month(self):
 		return int(JalaliDatetime(self.pay_date).strftime('%m'))	
+	
+	def __str__(self):
+		return f'{self.instructor.full_name} - {self.year}/{self.month}'
 
 class ReservedCourse(models.Model):
 	title = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
 	customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 	num_of_sessions = models.IntegerField(default=0)
 	cost_paid = models.IntegerField(default=0)
-	register_date = models.DateTimeField(default=now)
+	register_date = models.CharField(max_length=250, null=True, blank=True)
 	instructor = models.ForeignKey(Instructor, on_delete=models.CASCADE, null=True, blank=True)
 
 	@property
-	def shamsi_register_date(self):
-		return JalaliDatetime(self.register_date).strftime('%Y/%m/%d')	
-
-	@property
 	def shamsi_register_year(self):
-		return int(JalaliDatetime(self.register_date).strftime('%Y'))
+		year = self.register_date.split()[3]
+		if year == '۱۴۰۰':
+			year_num = 1400
+		elif year == '۱۴۰۱':
+			year_num = 1401
+		elif year == '۱۴۰۲':
+			year_num = 1402
+		elif year == '۱۴۰۳':
+			year_num = 1403
+		elif year == '۱۴۰۴':
+			year_num = 1404
+		elif year == '۱۴۰۵':
+			year_num = 1405
+		elif year == '۱۴۰۶':
+			year_num = 1405
+		return year_num
 
 	@property
 	def shamsi_register_month(self):
-		return int(JalaliDatetime(self.register_date).strftime('%m'))		
+		month = self.register_date.split()[2]
+		if month == 'فروردین':
+			month_num = 1
+		elif month == 'اردیبهشت':
+			month_num = 2
+		elif month == 'خرداد':
+			month_num = 3
+		elif month == 'تیر':
+			month_num = 4
+		elif month == 'مرداد':
+			month_num = 5
+		elif month == 'شهریور':
+			month_num = 6
+		elif month == 'مهر':
+			month_num = 7
+		elif month == 'آبان':
+			month_num = 8
+		elif month == 'آذر':
+			month_num = 9
+		elif month == 'دی':
+			month_num = 10
+		elif month == 'بهمن':
+			month_num = 11
+		elif month == 'اسفند':
+			month_num = 12
+		return month_num		
 
 	def __str__(self):
 		return f'{self.title} - {self.customer.full_name}'
@@ -151,4 +193,7 @@ class PaymentRecord(models.Model):
 	@property
 	def shamsi_created_month(self):
 		return int(JalaliDatetime(self.creted_date).strftime('%m'))
+	
+	def __str__(self):
+		return self.description
 

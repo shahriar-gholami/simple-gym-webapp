@@ -92,7 +92,7 @@
                                                                 <td>{{ course.customer.full_name }}</td>
                                                                 <td>{{ course.customer.phone_number }}</td>
                                                                 <td>{{ course.title }} - {{ course.num_of_sessions }} جلسه</td>
-                                                                <td>{{ course.shamsi_register_date }}</td>
+                                                                <td>{{ course.register_date }}</td>
                                                                 <td>{{ course.cost_paid|intcomma }} تومان</td>
                                                             </tr>
                                                             {% endfor %}
@@ -101,7 +101,7 @@
                                                                 <td>سهم مربی: {{ income.get_self_share|intcomma }} تومان</td>
                                                                 <td>سهم باشگاه: {{ income.get_gym_share|intcomma }} تومان</td>
                                                                 <td>وضعیت واریز سهم مربی: {% if income.is_paid %}پرداخت شده{% else %}پرداخت نشده{%endif%}</td>
-                                                                <td>تاریخ واریز: {% if income.is_paid %}{{ income.pay_date }}{% else %}-{%endif%}</td>
+                                                                <td>تاریخ واریز: {% if income.is_paid %}{{ income.shamsi_pay_date }}{% else %}-{%endif%}</td>
                                                             </tr>
                                                         {% endif %}
                                                     {% endif %}

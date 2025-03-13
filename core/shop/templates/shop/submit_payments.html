@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}پرداختی‌ها{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">پرداختی‌ها</h1>
+            </div>
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">ثبت پرداخت سهم مربی</div>
+                        </div>
+                        <form id="customerForm" method="post" action="{% url 'shop:instructor_dept_pay' %}">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-12 mb-0">
+                                        <label class="form-label">انتخاب پرداختی‌های باز</label>
+                                        <select class="form-control form-select select2" data-bs-placeholder="وضعیت بیمه"
+                                            name="instructore_income">
+                                            <option selected value="0">انتخاب پرداختی</option>
+                                            {% for dept in instructor_monthly_incomes %}
+                                            <option value="{{ dept.id }}">{{dept.instructor.full_name}} - دوره {{dept.year}}/{{dept.month}} - مبلغ {{dept.get_monthly_income|intcomma}} تومان</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-footer mt-2">
+                                    {% if instructor_monthly_incomes.exists %}
+                                    <button type="submit" class="login100-form-btn btn-primary">ثبت پرداختی مربی</button>
+                                    {% else %}
+                                    <a href="#" class="login100-form-btn btn-primary">در حال حاضر هیچ پرداختی بازی وجود ندارد</a>
+                                    {% endif %}
+                                </div>
+                                <div><br></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">ثبت پرداخت متفرقه</div>
+                        </div>
+                        <form id="gymcosts" method="post" action="{% url 'shop:submit_gym_costs' %}" onsubmit="return validateForm()">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-row mb-0">
+                                    <div class="form-group col-md-6 mb-0">
+                                        <label class="form-label">علت پرداخت</label>
+                                        <input name="description" id="description" class="form-control" placeholder="علت پرداخت" type="text">
+                                    </div>
+                                    <div class="form-group col-md-6 mb-0">
+                                        <label class="form-label">مبلغ</label>
+                                        <input name="amount" id="amount" class="form-control" placeholder="مبلغ" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-footer mt-2">
+                                    <button type="submit" class="login100-form-btn btn-primary">ثبت پرداختی</button>
+                                </div>
+                                <div><br></div>
+                            </div>
+                        </form>
+                        
+                        <script>
+                            function validateForm() {
+                                var description = document.getElementById("description").value;
+                                var amount = document.getElementById("amount").value;
+                        
+                                if (description.trim() === "") {
+                                    alert("لطفاً علت پرداخت را وارد کنید.");
+                                    return false;
+                                }
+                        
+                                if (amount.trim() === "") {
+                                    alert("لطفاً مبلغ را وارد کنید.");
+                                    return false;
+                                }
+                        
+                                return true;
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">لیست پرداختی‌ها</h3>
+                </div>
+                <div class="card-body">
+                    {% for year in years %}
+                    {% for month in monthes %}
+                    صورت پرداخت‌های انجام شده در {{year}}/{{month}}
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-nowrap border-bottom"
+                                                               id="responsive-datatable">
+                            <thead>
+                                <tr class="border-top">
+                                    <th>شرح پرداخت</th>
+                                    <th>مبلغ پرداختی</th>
+                                    <th>تاریخ پرداخت</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    
+                                {% for payment in payments %}
+                                    {% if payment.shamsi_created_year == year %}
+                                        {% if payment.shamsi_created_month == month %}
+                                            <tr>
+                                                <td>{{ payment.description }}</td>
+                                                <td>{{ payment.amount }}</td>
+                                                <td>{{ payment.shamsi_created_date }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                                    
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>             
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/plugins/persian-date-picker/babakhani/persian-date.min.js' %}"></script>
+<script src="{% static 'assets/plugins/persian-date-picker/babakhani/persian-datepicker.min.js' %}"></script>
+<script src="{% static 'assets/plugins/time-picker/jquery.timepicker.js' %}"></script>
+<script src="{% static 'assets/plugins/time-picker/toggles.min.js' %}"></script>
+<script src="{% static 'assets/plugins/date-picker/date-picker.js' %}"></script>
+<script src="{% static 'assets/plugins/input-mask/jquery.maskedinput.js' %}"></script>
+<script src="{% static 'assets/js/formelementadvnced.js' %}"></script>
+<script src="{% static 'assets/js/form-elements.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/autofill-table.js' %}"></script>
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<script src="{% static 'assets/js/autofill-table.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/custom.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/responsive.bootstrap5.min.js' %}"></script>
+<script src="{% static 'assets/js/table-data.js' %}"></script>
+{% endblock %}

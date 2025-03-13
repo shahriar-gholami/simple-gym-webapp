@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+{% block meta %}
+<meta charset="UTF-8">
+<meta content='width=device-width, initial-scale=1.0, user-scalable=0' name='viewport'>
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="description" content="{{ store.meta_description }}">
+<meta content="PicoSite" name="author">
+<meta name="keywords" content="{{store.meta_keywords}}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{store.get_canonical}}">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="{{store.meta_og_title}}">
+<meta property="og:description" content="{{meta_og_description}}">
+<meta property="og:image" content="{{store.get_logo_image}}" rel="shortcut icon" type="image/x-icon">
+<meta property="og:url" content="{{store.get_canonical}}">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card tags -->
+<meta name="twitter:card" content="Summary Card with Large Image">
+<meta name="twitter:title" content="{{store.meta_tc_title}}">
+<meta name="twitter:description" content="{{store.meta_tc_description}}">
+<meta name="twitter:image" content="{{store.get_logo_image}}">
+{% endblock %}
+
+{% block title %}دوره‌ها{% endblock %}
+{% block content %}
+
+<div class="main-content app-content mt-0">
+    <div class="side-app">
+        <div class="main-container container-fluid">
+            <div class="page-header">
+                <h1 class="page-title">دوره‌ها</h1>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">افزودن دوره جدید</div>
+                </div>
+                <form id="customerForm" method="post">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group col-xl-12 mb-0">
+                            <label class="form-label">عنوان دوره</label>
+                            <input name="title" class="form-control" placeholder="عنوان دوره" type="text">
+                        </div>
+                        <div class="form-footer mt-2">
+                            <button type="submit" class="login100-form-btn btn-primary">افزودن دوره</button>
+                        </div>
+                        <div><br></div>
+                    </div>
+                </form>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">لیست‌دوره‌ها</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-nowrap border-bottom"
+                                                               id="responsive-datatable">
+                            <thead>
+                                <tr class="border-top">
+                                    <th>شناسه دوره</th>
+                                    <th>عنوان دوره</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    
+                                {% for course in courses %}
+                                    
+                                    <tr>
+                                        <td>{{ course.id }}</td>
+                                        <td>{{ course.title }}</td>
+                                    </tr>
+                                       
+                                {% endfor %}
+                                    
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>             
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'assets/plugins/persian-date-picker/babakhani/persian-date.min.js' %}"></script>
+<script src="{% static 'assets/plugins/persian-date-picker/babakhani/persian-datepicker.min.js' %}"></script>
+<script src="{% static 'assets/plugins/time-picker/jquery.timepicker.js' %}"></script>
+<script src="{% static 'assets/plugins/time-picker/toggles.min.js' %}"></script>
+<script src="{% static 'assets/plugins/date-picker/date-picker.js' %}"></script>
+<script src="{% static 'assets/plugins/input-mask/jquery.maskedinput.js' %}"></script>
+<script src="{% static 'assets/js/formelementadvnced.js' %}"></script>
+<script src="{% static 'assets/js/form-elements.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/autofill-table.js' %}"></script>
+<script src="{% static 'assets/plugins/select2/select2.full.min.js' %}"></script>
+<script src="{% static 'assets/js/select2.js' %}"></script>
+<script src="{% static 'assets/js/autofill-table.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multiple-select.js' %}"></script>
+<script src="{% static 'assets/plugins/multipleselect/multi-select.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/custom.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.bootstrap5.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatable/responsive.bootstrap5.min.js' %}"></script>
+<script src="{% static 'assets/js/table-data.js' %}"></script>
+{% endblock %}

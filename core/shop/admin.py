@@ -37,4 +37,10 @@ class InstructorAdmin(admin.ModelAdmin):
 class InstructorMonthlyIncomeAdmin(admin.ModelAdmin):
     list_display = ('instructor', 'month', 'year', 'get_monthly_income')
     search_fields = ('instructor', )
-    filter_horizontal = ('courses',)  # برای نمایش بهتر ManyToManyField
+    filter_horizontal = ('courses',)  
+    
+    
+@admin.register(PaymentRecord)
+class PaymentRecordAdmin(admin.ModelAdmin):
+    list_display = ('description', 'amount','shamsi_created_date')
+    search_fields = ('description', )

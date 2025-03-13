@@ -26,14 +26,14 @@
 <meta name="twitter:image" content="{{store.get_logo_image}}">
 {% endblock %}
 
-{% block title %}مشترکین{% endblock %}
+{% block title %}عملکرد مالی مربیان{% endblock %}
 {% block content %}
 
 <div class="main-content app-content mt-0">
     <div class="side-app">
         <div class="main-container container-fluid">
             <div class="page-header">
-                <h1 class="page-title">مشترکین</h1>
+                <h1 class="page-title">عملکرد مالی مربیان</h1>
             </div>
             <div class="row">
                 <div class="col-xl-12">
@@ -77,7 +77,7 @@
                                         <tr class="border-top">
                                             <th>نام و نام خانوادگی مشترک</th>
                                             <th>شماره تماس</th>
-                                            <th>تعداد جلسات</th>
+                                            <th>دوره</th>
                                             <th>تاریخ ثبت‌نام</th>
                                             <th>هزینه پرداخت شده</th>
                                         </tr>
@@ -91,7 +91,7 @@
                                                             <tr>
                                                                 <td>{{ course.customer.full_name }}</td>
                                                                 <td>{{ course.customer.phone_number }}</td>
-                                                                <td>{{ course.num_of_sessions }}</td>
+                                                                <td>{{ course.title }} - {{ course.num_of_sessions }} جلسه</td>
                                                                 <td>{{ course.shamsi_register_date }}</td>
                                                                 <td>{{ course.cost_paid|intcomma }} تومان</td>
                                                             </tr>
@@ -100,8 +100,8 @@
                                                                 <td>دریافتی کل: {{ income.get_monthly_income|intcomma }} تومان</td>
                                                                 <td>سهم مربی: {{ income.get_self_share|intcomma }} تومان</td>
                                                                 <td>سهم باشگاه: {{ income.get_gym_share|intcomma }} تومان</td>
-                                                                <td>وضعیت واریز سهم مربی: {{ course.shamsi_register_date }}</td>
-                                                                <td>تاریخ واریز: {{ course.cost_paid|intcomma }} تومان</td>
+                                                                <td>وضعیت واریز سهم مربی: {% if income.is_paid %}پرداخت شده{% else %}پرداخت نشده{%endif%}</td>
+                                                                <td>تاریخ واریز: {% if income.is_paid %}{{ income.pay_date }}{% else %}-{%endif%}</td>
                                                             </tr>
                                                         {% endif %}
                                                     {% endif %}

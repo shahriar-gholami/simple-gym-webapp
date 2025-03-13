@@ -75,6 +75,8 @@ class InstructorMonthlyIncome(models.Model):
 	month = models.IntegerField(default=1)
 	year = models.IntegerField(default=1403)
 	courses =models.ManyToManyField('ReservedCourse', blank=True)
+	is_paid = models.BooleanField(default=False)
+	pay_date = models.DateTimeField(default=now, null=True, blank=True)
 
 	def get_monthly_income(self):
 		income = 0
@@ -88,8 +90,18 @@ class InstructorMonthlyIncome(models.Model):
 	
 	def get_gym_share(self):
 		return self.get_monthly_income() - self.get_self_share()
+	
+	@property
+	def shamsi_pay_date(self):
+		return JalaliDatetime(self.pay_date).strftime('%Y/%m/%d')	
 
+	@property
+	def shamsi_pay_year(self):
+		return int(JalaliDatetime(self.pay_date).strftime('%Y'))
 
+	@property
+	def shamsi_pay_month(self):
+		return int(JalaliDatetime(self.pay_date).strftime('%m'))	
 
 class ReservedCourse(models.Model):
 	title = models.ForeignKey(CourseTitle, on_delete=models.CASCADE)
@@ -123,8 +135,20 @@ class SalaryPayment(models.Model):
 	def __str__(self):
 		return self.instructor.full_name
 
+class PaymentRecord(models.Model):
+	amount = models.IntegerField()
+	description = models.CharField(max_length=250)
+	creted_date = models.DateTimeField(auto_now_add=True)
 
+	@property
+	def shamsi_created_date(self):
+		return JalaliDatetime(self.creted_date).strftime('%Y/%m/%d')	
 
+	@property
+	def shamsi_created_year(self):
+		return int(JalaliDatetime(self.creted_date).strftime('%Y'))
 
-
+	@property
+	def shamsi_created_month(self):
+		return int(JalaliDatetime(self.creted_date).strftime('%m'))
 

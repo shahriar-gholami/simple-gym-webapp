@@ -34,6 +34,9 @@ class InstructorRegister(forms.Form):
 	national_code = forms.CharField()
 	courses = forms.CharField()
 	share_percent = forms.IntegerField()
+	birthday = forms.CharField()
+	study = forms.CharField()
+	address = forms.CharField()
 
 class CourseAdd(forms.Form):
 	title = forms.CharField()

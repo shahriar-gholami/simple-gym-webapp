@@ -206,12 +206,18 @@ class InstructorsView(View):
 			phone_number = form.cleaned_data['phone_number']
 			national_code = form.cleaned_data['national_code']
 			share_percent = form.cleaned_data['share_percent']
+			birthday = form.cleaned_data['birthday']
+			study = form.cleaned_data['study']
+			address = form.cleaned_data['address']
 			# ایجاد مربی جدید
 			new_instructor = Instructor.objects.create(
 				full_name=full_name,
 				phone_number=phone_number,
 				national_code=national_code,
-				share_percent=share_percent
+				share_percent=share_percent,
+				birthday = birthday,
+				study = study, 
+				address = address
 			)
 			
 			# اضافه کردن دوره‌ها به مربی

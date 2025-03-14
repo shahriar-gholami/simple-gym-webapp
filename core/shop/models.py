@@ -48,6 +48,9 @@ class Instructor(models.Model):
 	courses = models.ManyToManyField(CourseTitle, blank=True)
 	created_date = models.DateTimeField(auto_now_add=True, null=True)
 	share_percent = models.IntegerField(default=70)
+	birthday = models.CharField(max_length=250, null=True, blank=True)
+	study = models.CharField(max_length=250, null=True, blank=True)
+	address = models.TextField(null=True, blank=True)
 
 	@property
 	def register_date(self):

@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .forms import *
 from django.views import View
 from django.utils.timezone import now  # وارد کردن now از django.utils.timezone
-
 from shop.models import *
 
 class CustomerRegister(View):
@@ -50,9 +49,12 @@ class CourseRegisterView(View):
 	def get(self, request):
 		customers = Customer.objects.all()
 		courses = CourseTitle.objects.all()
-		form = CourseRegisterForm()
+		form = CourseRegisterForm
 		instructors = Instructor.objects.all()
-		return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses, 'instructors':instructors})
+		return render(request, self.template_name, {'form': form, 
+													'customers':customers, 
+													'courses':courses, 
+													'instructors':instructors})
 
 	def post(self, request):
 		customers = Customer.objects.all()
@@ -67,10 +69,8 @@ class CourseRegisterView(View):
 			cost_paid = form.cleaned_data['cost_paid']
 			instructor_id = form.cleaned_data['instructor']
 			date = form.cleaned_data['date'].replace('سه شنبه', 'سه‌شنبه').replace('چهار شنبه', 'چهارشنبه')
-			print('GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
-			print(date.split())
-			
 			instructor = Instructor.objects.get(id=instructor_id)
+
 			new_reserve = ReservedCourse.objects.create(
 				customer = customer,
 				title = course_title,
@@ -79,6 +79,7 @@ class CourseRegisterView(View):
 				instructor = instructor,
 				register_date = date
 			)
+			
 			instructor_monthly_income = InstructorMonthlyIncome.objects.filter(month=new_reserve.shamsi_register_month,year=new_reserve.shamsi_register_year,instructor=instructor).first()
 			if instructor_monthly_income != None:
 				instructor_monthly_income.courses.add(new_reserve)
@@ -198,9 +199,7 @@ class InstructorsView(View):
 	def post(self, request):
 		form = InstructorRegister(request.POST)
 		courses = request.POST.getlist('courses')
-		print('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh')
-		print(courses)
-		
+
 		if form.is_valid():
 			full_name = form.cleaned_data['full_name']
 			phone_number = form.cleaned_data['phone_number']
@@ -233,7 +232,7 @@ class InstructorsView(View):
 		else:
 			# اگر فرم معتبر نباشد، فرم را دوباره نمایش دهید
 			courses = CourseTitle.objects.all()
-			return render(request, 'your_template.html', {'form': form, 'courses': courses})
+			return render(request, self.template_name, {'form': form, 'courses': courses, 'fail_message':'ثبت‌نام مربی انجام نشد. اطلاعات ورودی نامعتبر یا ناقص'})
 
 class DeleteInstructorView(View):
 

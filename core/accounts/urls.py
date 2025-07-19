@@ -1,12 +1,9 @@
-from django.urls import path, include
-from . import views
+from django.urls import path
+from .views import *
 
-app_name = "accounts"
-
-
+app_name = 'accounts'
 
 urlpatterns = [
-    # path("api/v1/", include("accounts.api.v1.urls")),    
-    # path('owner-authentication/', views.OwnerRegisterLoginView.as_view(), name='owner-authentication'),
-    # path('owner-authentication/login/<str:phone_number>', views.OwnerloginView.as_view(), name='owner-login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]

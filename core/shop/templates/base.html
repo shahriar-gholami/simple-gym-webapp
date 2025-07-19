@@ -43,13 +43,20 @@
                                 
                                 
 
-
+                                
                                 <div class="dropdown  d-flex notifications">
-                                    <a class="nav-link icon" href="http://127.0.0.1:8000/admin/login/?next=/admin/"><i
-                                            class="fe fe-home"></i>
+                                    <a class="nav-link icon" href="{% url 'admin:index' %}"><i
+                                        class="fe fe-home"></i>
                                     </a>             
                                 </div> 
 
+
+                                {% if request.user.is_authenticated %}
+                                <div class="dropdown  d-flex notifications">
+                                    <a class="btn btn-primary " href="{% url 'accounts:logout' %}">خروج
+                                    </a>             
+                                </div> 
+                                {% endif %}
                                
                                 <button class="nav-link icon navbar-toggler navresponsive-toggler d-lg-none ms-auto" data-bs-toggle="sidebar-right"
                                 data-target=".sidebar-right" href="javascript:void(0);" aria-controls="navbarSupportedContent-4" aria-expanded="false"

@@ -3,8 +3,9 @@ from .forms import *
 from django.views import View
 from django.utils.timezone import now  # وارد کردن now از django.utils.timezone
 from shop.models import *
+from django.contrib.auth.mixins import LoginRequiredMixin 
 
-class CustomerRegister(View):
+class CustomerRegister(LoginRequiredMixin, View):
 
 	template_name = f'shop/customer_register.html'
 	def get(self, request):
@@ -42,7 +43,7 @@ class CustomerRegister(View):
 		customers = Customer.objects.all()
 		return render(request, self.template_name, {'form': form, 'message':'اطلاعات به صورت ناقص وارد شده است.', 'customers':customers})
 	
-class CourseRegisterView(View):
+class CourseRegisterView(LoginRequiredMixin, View):
 
 	template_name = f'shop/course_register.html'
 
@@ -96,14 +97,14 @@ class CourseRegisterView(View):
 		fail_message = 'ثبت نام مشترک با موفقیت انجام نشد. اطلاعات ورودی ناقص یا نامعتبر.' 
 		return render(request, self.template_name, {'form': form, 'customers':customers, 'courses':courses, 'fail_message':fail_message})
 
-class DeleteCustomerView(View):
+class DeleteCustomerView(LoginRequiredMixin, View):
 
 	def get(self, request, customer_id):
 		customer = Customer.objects.get(id = customer_id)
 		customer.delete()
 		return redirect('shop:index')
 	
-class InstructorFinanceView(View):
+class InstructorFinanceView(LoginRequiredMixin, View):
 
 	template_name = 'shop/instructor_finance.html'
 
@@ -131,7 +132,7 @@ class InstructorFinanceView(View):
 			instructor = Instructor.objects.get(id = instructor_id)
 			return redirect('shop:instructor_finance', instructor_id)
 
-class SubmitPaymentsView(View):
+class SubmitPaymentsView(LoginRequiredMixin, View):
 	 
 	template_name = 'shop/submit_payments.html'
 
@@ -151,7 +152,7 @@ class SubmitPaymentsView(View):
 														'years':years
 														})
 	
-class ConfirmInstructorPaymentView(View):
+class ConfirmInstructorPaymentView(LoginRequiredMixin, View):
 
 	def post(self, request):
 		
@@ -168,7 +169,7 @@ class ConfirmInstructorPaymentView(View):
 			)
 			return redirect('shop:payments')
 		
-class SubmitGymCostsView(View):
+class SubmitGymCostsView(LoginRequiredMixin, View):
 
 	def post(self, request):
 		
@@ -182,7 +183,7 @@ class SubmitGymCostsView(View):
 			)
 			return redirect('shop:payments')
 
-class InstructorsView(View):
+class InstructorsView(LoginRequiredMixin, View):
 
 	template_name = 'shop/instructors.html'
 
@@ -234,14 +235,14 @@ class InstructorsView(View):
 			courses = CourseTitle.objects.all()
 			return render(request, self.template_name, {'form': form, 'courses': courses, 'fail_message':'ثبت‌نام مربی انجام نشد. اطلاعات ورودی نامعتبر یا ناقص'})
 
-class DeleteInstructorView(View):
+class DeleteInstructorView(LoginRequiredMixin, View):
 
 	def get(self, request, instructor_id):
 		instructor = Instructor.objects.get(id = instructor_id)
 		instructor.delete()
 		return redirect('shop:instructors')
 	
-class CoursesView(View):
+class CoursesView(LoginRequiredMixin, View):
 
 	template_name = 'shop/courses.html'
 
@@ -261,7 +262,7 @@ class CoursesView(View):
 			)
 			return redirect('shop:courses')
 		
-class DeleteCourseView(View):
+class DeleteCourseView(LoginRequiredMixin, View):
 
 	def get(self, request, course_id):
 		course = CourseTitle.objects.get(id = course_id)

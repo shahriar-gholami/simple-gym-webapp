@@ -24,8 +24,9 @@ class CustomLoginView(View):
                 return redirect('shop:course_register')  # به دلخواه تغییر بده
             else:
                 messages.error(request, 'Phone number or password is incorrect.')
+                message = 'نام کاربری یا رمز عبور نامعتبر'
 
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'message':message})
 
 
 class LogoutView(View):

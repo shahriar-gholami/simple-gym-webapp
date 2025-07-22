@@ -49,18 +49,17 @@
 
 
     <!-- PAGE -->
-    <div class="page">
-        <div class="">
+    <div class="page bg-pink">
+        <div >
 
             <!-- CONTAINER OPEN -->
-            <div class="col col-login mx-auto mt-7">
-                <div class="text-center">
-                    <img alt="" class="header-brand-img" src="{% static 'assets\images\logo.jpg' %}" height="70px">
-                </div>
-            </div>
+            
 
             <div class="container-login100">
                 <div class="wrap-login100 p-6">
+                    <div class="text-center mb-5">
+                        <img alt="" class="header-brand-img" src="{% static 'assets\images\logo.jpg' %}" height="70px">
+                    </div>
                     <form class="login100-form validate-form" method="post">
                         {% csrf_token %}
                         <span class="login100-form-title pb-5">
